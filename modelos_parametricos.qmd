@@ -1,0 +1,75 @@
+# Modelos Paramétricos
+
+{{< include _dados.qmd >}}
+
+```{r}
+formula = Surv(tempo, Obito) ~  Idade + 
+                                ClasseFuncional +
+                                Sincope +
+                                FracaoEjecao +
+                                RazaoTEI +
+                                VolAEindexado
+```
+
+## Exponencial
+
+```{r}
+library(survival)
+modeloExponencial <- survreg(formula, data = dados, dis = "exponential")
+summary(modeloExponencial)
+```
+
+## LogNormal
+
+```{r}
+modeloLogNormal <- survreg(formula, data = dados, dis = "lognormal")
+summary(modeloLogNormal)
+```
+
+## Weibull
+
+```{r}
+modeloWeibull <- survreg(formula, data = dados, dis = "weibull")
+summary(modeloWeibull)
+```
+
+
+A variável síncope não é significativa em nenhum dos modelos propostos, assim, reescrevemos a fórmula excluindo a variável.
+
+```{r}
+formula = Surv(tempo, Obito) ~  Idade + 
+                                ClasseFuncional +
+                                FracaoEjecao +
+                                RazaoTEI +
+                                VolAEindexado
+```
+
+Ajustando novamente os modelos, temos:
+
+```{r}
+modeloExponencial <- survreg(formula, data = dados, dis = "exponential")
+modeloLogNormal <- survreg(formula, data = dados, dis = "lognormal")
+modeloWeibull <- survreg(formula, data = dados, dis = "weibull")
+```
+
+## Seleção do modelo paramétrico
+
+Utilizando AIC como critério para seleção do modelo, temos:
+
+| Modelo      | AIC                                   |
+|---          |---                                    |
+| Exponencial | `r extractAIC(modeloExponencial)[2]`  |
+| Log-Normal  | `r extractAIC(modeloLogNormal)[2]`    |
+| Weibull     | `r extractAIC(modeloWeibull)[2]`      |
+
+: AICs
+
+
+Devido ao menor AIC, o modelo exponencial foi o escolhido.
+
+**TENTAR FAZER UM QQPLOT PRA VERIFICAR**
+
+```{r}
+residuos <- residuals(modeloExponencial)
+```
+

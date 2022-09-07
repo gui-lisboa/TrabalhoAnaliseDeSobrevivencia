@@ -1,0 +1,35 @@
+project:
+  title: "Análise de Sobrevivência"
+  type: book
+  output-dir: _output
+
+lang: pt-BR
+toc: true
+execute: 
+  warning: false
+  enabled: true
+
+format: 
+  pdf:
+    include-in-header: 
+      text: |
+        \usepackage{float}
+        \floatplacement{table}{H}
+        \floatplacement{figure}{H}
+    code-block-border-left: "#0000ff"
+    highlight-style: tango
+
+book: 
+  title: "Análise de Sobrevivência"
+  author: 
+    - Guilherme Lisboa de Oliveira (GRR20170414)
+    - Rafael Antonio Teodoro da Silva (GRR20185589)
+  date: "Setembro 2022"
+  chapters:
+    - index.qmd
+    - exploratoria.qmd
+    - modelos_parametricos.qmd
+    - modelo_cox.qmd
+    - resultados.qmd
+
+

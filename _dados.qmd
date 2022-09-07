@@ -1,0 +1,13 @@
+```{r, echo=FALSE}
+dados = read.csv('banco_chagas.csv')
+dados = dados[dados$tempo>0,]
+
+dados$Sexo = as.factor(dados$Sexo)
+levels(dados$Sexo) = c("Masculino", "Feminino")
+
+dados$ClasseFuncional = as.factor(dados$ClasseFuncional)
+
+dados$Sincope = as.factor(dados$Sincope)
+levels(dados$Sincope) = c("Ausente", "Rara", "Ocasional", "Frequente")
+
+```

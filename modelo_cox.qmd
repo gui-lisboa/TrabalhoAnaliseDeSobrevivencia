@@ -1,0 +1,53 @@
+# Modelo Cox
+
+{{< include _dados.qmd >}}
+
+Criando o modelo utilizando as mesmas variáveis aplicadas nos modelos paramétricos.
+```{r}
+library(survival)
+library(survminer)
+
+formula = Surv(tempo, Obito) ~  Idade + 
+                                ClasseFuncional +
+                                FracaoEjecao +
+                                RazaoTEI +
+                                VolAEindexado
+
+modeloCox = coxph(formula, data = dados, )
+
+summary(modeloCox)
+```
+
+Verificando se a suposição de falhas proporcionais é atendida.
+```{r}
+zph <- cox.zph(modeloCox, transform = "identity")
+zph
+```
+
+Como a variável Classe Funcional parece não atender o presuposto, estratificamos o modelo conforme a categoria de Classe Funcional.
+
+```{r}
+formulaEstratificadaPorClasseFuncional = Surv(tempo, Obito) ~  Idade + 
+                                strata(ClasseFuncional) +
+                                FracaoEjecao +
+                                RazaoTEI +
+                                VolAEindexado
+
+modeloCoxStrataCF = coxph(formulaEstratificadaPorClasseFuncional, data = dados, )
+summary(modeloCoxStrataCF)
+
+```
+
+Avaliando novamente a suposição de falhas proporcionais
+
+```{r}
+zphEstratificado <- cox.zph(modeloCoxStrataCF, transform = "identity")
+zphEstratificado
+```
+
+Assim, verificando também os resíduos de Schoenfeld.
+
+```{r}
+#| fig-cap: Resíduos de Schoenfeld
+ggcoxzph(zphEstratificado)
+```

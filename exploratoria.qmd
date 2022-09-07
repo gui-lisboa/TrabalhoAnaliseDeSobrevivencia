@@ -1,0 +1,83 @@
+# Análise Exploratória
+
+{{< include _dados.qmd >}}
+
+Para iniciar a descrição do comportamento dos dados, construímos um modelo de Kaplan-Meier:
+
+```{r}
+library(survival)
+modeloKM = survfit(Surv(tempo, Obito) ~ 1, data = dados)
+modeloKM
+```
+
+O modelo gera a seguinte curva de sobrevivência:
+
+```{r}
+#| fig-cap: Curva de sobrevivência do modelo Kaplan-Meier
+library(survminer)
+ggsurvplot(modeloKM)
+```
+
+Desmembrando o modelo em cada covariável, temos:
+
+- **Sexo**
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Sexo
+modeloSexo = survfit(Surv(tempo, Obito) ~ Sexo, data = dados)
+modeloSexo
+ggsurvplot(modeloSexo, pval = TRUE)
+```
+Não foi encontrada uma diferença significativa entre os grupos Masculino e Feminino.
+
+- **Idade** (7 grupos de 10 anos cada)
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Idade em 7 intervalos
+modeloIdade = survfit(Surv(tempo, Obito) ~ cut_interval(Idade, 7), data = dados)
+modeloIdade
+ggsurvplot(modeloIdade, pval = TRUE) + guides(colour = guide_legend(nrow = 4))
+```
+Idade parece ser um fator importante caso o indíviduo seja jovem ou idoso. Estes grupos tem poucas observações, principalmente o último intervalo (idosos) que acaba tendo a mediana na faixa intervalar inferior sobreposta por outros dois intervalos de idade.
+
+- **Classe Funcional**
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Classe Funcional
+modeloClasseFuncional = survfit(Surv(tempo, Obito) ~ ClasseFuncional, data = dados)
+modeloClasseFuncional
+ggsurvplot(modeloClasseFuncional, pval = TRUE) + guides(colour = guide_legend(nrow = 2))
+```
+
+- **Síncope**
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Síncope
+modeloSincope = survfit(Surv(tempo, Obito) ~ Sincope, data = dados)
+modeloSincope
+ggsurvplot(modeloSincope, pval = TRUE) + guides(colour = guide_legend(nrow = 2))
+```
+
+- **Fração Ejeção** (3 grupos)
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Fração Rejeição em 3 intervalos
+modeloFracaoEjecao = survfit(Surv(tempo, Obito) ~ cut_interval(FracaoEjecao, 3), data = dados)
+modeloFracaoEjecao
+ggsurvplot(modeloFracaoEjecao, pval = TRUE) + guides(colour = guide_legend(nrow = 3))
+```
+
+- **Razão TEI** (3 grupos)
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Razão TEI em 3 intervalos
+modeloRazaoTEI = survfit(Surv(tempo, Obito) ~ cut_interval(RazaoTEI, 3), data = dados)
+modeloRazaoTEI
+ggsurvplot(modeloRazaoTEI, pval = TRUE) + guides(colour = guide_legend(nrow = 3))
+```
+
+- **Volume Átrio Esquerdo Indexado** (3 grupos)
+```{r}
+#| fig-cap: Curva de sobrevivência Modelo usando apenas variável Volume Átrio Esquerdo Indexado em 3 intervalos
+modeloVolAEindexado = survfit(Surv(tempo, Obito) ~ cut_interval(VolAEindexado, 3),
+                              data = dados)
+modeloVolAEindexado
+ggsurvplot(modeloVolAEindexado, pval = TRUE) + 
+    guides(colour = guide_legend(nrow = 3))
+```
+
+Assim, para a sequência do trabalho, todas as variáveis serão consideradas significantes para a construção dos modelos com exceção da variável Sexo.

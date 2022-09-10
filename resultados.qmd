@@ -16,13 +16,15 @@ modeloCoxStrataCF = coxph(formulaStrataCF, data = dados)
 
 ## Intepretação modelo exponencial
 
+```{r}
+exp(-modeloExponencial$coefficients)
+```
 
+As covariáveis idade e Fração Ejeção tem efeito positivo reduzindo o risco de óbito em 0,98 e 0,96 vezes a cada uma unidade, respectivamente.
+
+A covariável Classe Funcional aumenta significativamente o risco do evento em relação a categoria base Ausente, sendo que indivíduos na classe funcional 4 possuem risco 3,12 vezes maior. As covariáveis Razão TEI e VolAEindexado também contríbuem para o aumento do risco de óbito.
 
 ## Interpretação modelo Cox
-
-O modelo de Cox estratificado pelas classes Funcionais aponta que o fator idade é significativo para o modelo, mas o incremento de cada 1 ano na idade pode não necessariamente implicar no aumento do risco de óbito, já que o intervalo de razão de risco inclui 1. Já Fração de Ejeção diminui o risco de óbito a cada aumento, entretanto o intervalo de confiança também incluí o valor de razão 1. A variávei RazãoTEI apresenta maior erro padrão para o coeficiente e estima-se que o aumento de 1 ponto desta variável implique em um risco 1.88 vezes maior da ocorrência do evento óbito. Por fim, Volume Átrio Esquerdo Indexado indica que o aumento em 1 ponto implica em um aumento de 1.01 vezes no risco de óbito. As razões de risco estão resumidas abaixo:
-
-
 
 ```{r}
 #| fig-cap: Razão de Riscos do modelo de Cox estratificado por Classe Funcional
@@ -30,3 +32,5 @@ attr(modeloCoxStrataCF$terms, "dataClasses") <- attr(
     modeloCoxStrataCF$terms, "dataClasses")[-3]
 ggforest(modeloCoxStrataCF, data = dados)
 ```
+
+O modelo de Cox estratificado pelas classes Funcionais aponta que o fator idade é significativo para o modelo, mas o incremento de cada 1 ano na idade pode não necessariamente implicar no aumento do risco de óbito, já que o intervalo de razão de risco inclui 1. Já Fração de Ejeção diminui o risco de óbito a cada aumento, entretanto o intervalo de confiança também incluí o valor de razão 1. A variávei RazãoTEI apresenta maior erro padrão para o coeficiente e estima-se que o aumento de 1 ponto desta variável implique em um risco 1.88 vezes maior da ocorrência do evento óbito. Por fim, Volume Átrio Esquerdo Indexado indica que o aumento em 1 ponto implica em um aumento de 1.01 vezes no risco de óbito. As razões de risco estão resumidas abaixo:

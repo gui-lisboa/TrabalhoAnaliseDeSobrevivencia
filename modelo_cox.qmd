@@ -24,7 +24,7 @@ zph <- cox.zph(modeloCox, transform = "identity")
 zph
 ```
 
-Como a variável Classe Funcional parece não atender o presuposto, estratificamos o modelo conforme a categoria de Classe Funcional.
+Como a covariável Classe Funcional parece não atende o presuposto  de falhas proporcionais, assim, para dar continuidade na análise utilizando o modelo de Cox, estratificamos a covariável Classe Funcional.
 
 ```{r}
 formulaEstratificadaPorClasseFuncional = Surv(tempo, Obito) ~  Idade + 
@@ -38,16 +38,18 @@ summary(modeloCoxStrataCF)
 
 ```
 
-Avaliando novamente a suposição de falhas proporcionais
+Avaliando novamente a suposição de falhas proporcionais para diagnostico do modelo.
 
 ```{r}
 zphEstratificado <- cox.zph(modeloCoxStrataCF, transform = "identity")
 zphEstratificado
 ```
 
-Assim, verificando também os resíduos de Schoenfeld.
+Assim, confirmadas a suposição de falhas proporcionais, verificando também os resíduos de Schoenfeld.
 
 ```{r}
 #| fig-cap: Resíduos de Schoenfeld
 ggcoxzph(zphEstratificado)
 ```
+
+Nota-se que os resíduos estão centrados centrados na linha horizontal zero.

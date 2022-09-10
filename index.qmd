@@ -2,7 +2,7 @@
 
 ## Conjunto de dados
 
-O conjunto de dados usado no trabalho busca investigar fatores associados com a sobrevida de pacientes chagásticos utilizando os dados abaixo: 
+O conjunto de dados usado no trabalho busca investigar fatores associados com a sobrevida de pacientes chagásticos utilizando os dados abaixo:
 
 ```{r}
 #| label: tbl-dados
@@ -12,13 +12,13 @@ dados = read.csv('banco_chagas.csv')
 knitr::kable(head(dados), format = "latex")
 ```
 
-Inspecionando as variáves, temos:
+Inspecionando as covariáves, temos:
 
 ```{r}
 str(dados)
 ```
 
-A descrição de cada variável é conhecida:
+A descrição de cada covariável é conhecida:
 
 - **Sexo**: sexo do paciente; 1="Masculino", 2="Feminino"
 - **Idade**: idade do paciente em anos
@@ -28,7 +28,7 @@ A descrição de cada variável é conhecida:
 - **Razão TEI**: biomarcador de lesão cardíaca
 - **VolAEindexado**: volume do átrio esquerdo indexado
 
-Assim, devemos aplicar as seguintes transformações nas variáveis para que passem a ser categóricas como descrito acima:
+Assim, devemos aplicar as seguintes transformações nas covariáveis para que passem a ser categóricas como descrito acima:
 
 ```{r}
 dados$Sexo = as.factor(dados$Sexo)

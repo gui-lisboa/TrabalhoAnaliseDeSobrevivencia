@@ -2,7 +2,7 @@
 
 {{< include _dados.qmd >}}
 
-Para iniciar a descrição do comportamento dos dados, construímos um modelo de Kaplan-Meier:
+Para analisar o comportamento dos dados, construímos um modelo de Kaplan-Meier:
 
 ```{r}
 library(survival)
@@ -27,16 +27,19 @@ modeloSexo = survfit(Surv(tempo, Obito) ~ Sexo, data = dados)
 modeloSexo
 ggsurvplot(modeloSexo, pval = TRUE)
 ```
-Não foi encontrada uma diferença significativa entre os grupos Masculino e Feminino.
+Como o p-valor encontrado foi maior que 0,05, o teste não aponta diferença estatísticamente significativa entre os grupos masculino e feminino.
 
-- **Idade** (7 grupos de 10 anos cada)
+- **Idade**
+
+Para a análise da covariável Idade, os dados foram dividos em 7 grupos com intervalos de aproximadamente 10 anos para buscar discriminar melhor os grupos de risco.
+
 ```{r}
 #| fig-cap: Curva de sobrevivência Modelo usando apenas variável Idade em 7 intervalos
 modeloIdade = survfit(Surv(tempo, Obito) ~ cut_interval(Idade, 7), data = dados)
 modeloIdade
 ggsurvplot(modeloIdade, pval = TRUE) + guides(colour = guide_legend(nrow = 4))
 ```
-Idade parece ser um fator importante caso o indíviduo seja jovem ou idoso. Estes grupos tem poucas observações, principalmente o último intervalo (idosos) que acaba tendo a mediana na faixa intervalar inferior sobreposta por outros dois intervalos de idade.
+Idade parece ser um fator de risco importante caso o indíviduo seja jovem, aumentando o risco de ocorrência do evento óbito.
 
 - **Classe Funcional**
 ```{r}
@@ -45,6 +48,7 @@ modeloClasseFuncional = survfit(Surv(tempo, Obito) ~ ClasseFuncional, data = dad
 modeloClasseFuncional
 ggsurvplot(modeloClasseFuncional, pval = TRUE) + guides(colour = guide_legend(nrow = 2))
 ```
+Como o p-valor encontrado foi menos que  0,05, o teste aponta diferença estatísticamente significativa entre os grupos da covarável Classe Funcional. Realizando uma inspeção visual, nota-se que os grupos 1 e 4 tem curvas de sobrevivência distintas.
 
 - **Síncope**
 ```{r}
@@ -53,24 +57,36 @@ modeloSincope = survfit(Surv(tempo, Obito) ~ Sincope, data = dados)
 modeloSincope
 ggsurvplot(modeloSincope, pval = TRUE) + guides(colour = guide_legend(nrow = 2))
 ```
+Como o p-valor encontrado foi menos que  0,05, o teste aponta diferença estatísticamente significativa entre os grupos da covarável Síncope.
 
-- **Fração Ejeção** (3 grupos)
+- **Fração Ejeção**
+
+Para a análise da covariável Fração Ejeção, os dados foram dividos em 3 grupos.
+
 ```{r}
 #| fig-cap: Curva de sobrevivência Modelo usando apenas variável Fração Rejeição em 3 intervalos
 modeloFracaoEjecao = survfit(Surv(tempo, Obito) ~ cut_interval(FracaoEjecao, 3), data = dados)
 modeloFracaoEjecao
 ggsurvplot(modeloFracaoEjecao, pval = TRUE) + guides(colour = guide_legend(nrow = 3))
 ```
+Como o p-valor encontrado foi menos que  0,05, o teste aponta diferença estatísticamente significativa entre os grupos da covarável Fração Ejeção.
 
-- **Razão TEI** (3 grupos)
+- **Razão TEI**
+
+Para a análise da covariável Razão TEI, os dados foram dividos em 3 grupos.
+
 ```{r}
 #| fig-cap: Curva de sobrevivência Modelo usando apenas variável Razão TEI em 3 intervalos
 modeloRazaoTEI = survfit(Surv(tempo, Obito) ~ cut_interval(RazaoTEI, 3), data = dados)
 modeloRazaoTEI
 ggsurvplot(modeloRazaoTEI, pval = TRUE) + guides(colour = guide_legend(nrow = 3))
 ```
+Como o p-valor encontrado foi menos que  0,05, o teste aponta diferença estatísticamente significativa entre os grupos da covarável Razão TEI.
 
-- **Volume Átrio Esquerdo Indexado** (3 grupos)
+- **Volume Átrio Esquerdo Indexado**
+
+Para a análise da covariável Volume Átrio Esquerdo Indexado, os dados foram dividos em 3 grupos.
+
 ```{r}
 #| fig-cap: Curva de sobrevivência Modelo usando apenas variável Volume Átrio Esquerdo Indexado em 3 intervalos
 modeloVolAEindexado = survfit(Surv(tempo, Obito) ~ cut_interval(VolAEindexado, 3),
@@ -79,5 +95,6 @@ modeloVolAEindexado
 ggsurvplot(modeloVolAEindexado, pval = TRUE) + 
     guides(colour = guide_legend(nrow = 3))
 ```
+Como o p-valor encontrado foi menos que  0,05, o teste aponta diferença estatísticamente significativa entre os grupos da covarável Volume Átrio Esquerdo Indexado.
 
-Assim, para a sequência do trabalho, todas as variáveis serão consideradas significantes para a construção dos modelos com exceção da variável Sexo.
+Para a sequência das análises, a covariável Sexo não será utilizada dado que não há diferença estatísticamente significativa entre os grupos masculino e feminino.

@@ -33,8 +33,7 @@ modeloWeibull <- survreg(formula, data = dados, dis = "weibull")
 summary(modeloWeibull)
 ```
 
-
-A variável síncope não é significativa em nenhum dos modelos propostos, assim, reescrevemos a fórmula excluindo a variável.
+Nos três modelos propostos a covariável Síncope não é significativa, assim, reformulamos os modelos excluíndo esta covariável.
 
 ```{r}
 formula = Surv(tempo, Obito) ~  Idade + 
@@ -67,9 +66,23 @@ Utilizando AIC como critério para seleção do modelo, temos:
 
 Devido ao menor AIC, o modelo exponencial foi o escolhido.
 
-**TENTAR FAZER UM QQPLOT PRA VERIFICAR**
-
 ```{r}
-residuos <- residuals(modeloExponencial)
+summary(modeloExponencial)
 ```
 
+Validando a adequação do modelo, temos:
+
+```{r, echo=FALSE}
+#| output: false
+
+library(gamlss)
+library(survival)
+fit_GG2 <- gamlss(Surv(tempo, Obito) ~ Idade + ClasseFuncional + FracaoEjecao + RazaoTEI +
+                                VolAEindexado, data = dados, family = gamlss.cens::cens(GG), method = mixed(10, 50))
+
+fit_EXP2 <- update(fit_GG2, family = gamlss.cens::cens(EXP))
+```
+
+```{r, echo=FALSE, out.height="100%"}
+plot(fit_EXP2)
+```
